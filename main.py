@@ -4,6 +4,8 @@
 # Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
 import difflib
 import json
+import random
+import time
 
 import requests
 
@@ -12,7 +14,7 @@ import Source
 import sys
 import os
 
-MeaninglessWords = ['，', '。', '：', '、', '！', '（', '）', ',', '.', ':', '!', '(', ')', '*', '`']
+MeaninglessWords = ['，', '。', '：', '、', '！', '（', '）', ',', '.', ':', '!', '(', ')', '*', '`', ' ']
 ErrorCount = 0
 
 
@@ -29,20 +31,26 @@ def SayHelloToUser():
 
 def Check(s1, s2):
     for Word in MeaninglessWords:
-        s1.replace(Word, '')
-        s2.replace(Word, '')
+        s1 = s1.replace(Word, '')
+        s2 = s2.replace(Word, '')
     return 1 - difflib.SequenceMatcher(None, s1, s2).quick_ratio()
 
 
-def Recite(Problems, PickerFunc):
+def Recite(Problems, PickerFunc, Count):
     global ErrorCount
     Picked = 0
-    for r in range(len(Problems)):
+    if Count == 0:
+        Count = len(Problems)
+
+    for r in range(Count):
+        '''
+        范围不变，不需要用Count
+        '''
         Picked = PickerFunc(len(Problems), Picked)
         WholeProblemPercent = 1
 
         while WholeProblemPercent >= 0.2:
-            print('--- 现在是', r + 1, '/', len(Problems), '个问题 ---')
+            print('--- 现在是', r + 1, '/', Count, '个问题 ---')
             print('当前问题: ' + Problems[Picked - 1]['title'])
             print('答案为:')
             for Point in Problems[Picked - 1]['points']:
@@ -53,7 +61,7 @@ def Recite(Problems, PickerFunc):
             for NMSL in range(1145):
                 print('\n')
 
-            print('--- 现在是', r + 1, '/', len(Problems), '个问题 ---')
+            print('--- 现在是', r + 1, '/', Count, '个问题 ---')
             print('当前问题: ' + Problems[Picked - 1]['title'])
             print('请回答:')
 
@@ -75,6 +83,7 @@ def Recite(Problems, PickerFunc):
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
     Result = []
+    random.seed(int(time.time()))
 
     print('蒸痔背书硝铸獸 Developed by Jerry Chou')
     print('-----------------------------------')
@@ -101,14 +110,15 @@ if __name__ == '__main__':
     print('2 - 随机抽取题目进行默写')
 
     Input = int(input('(模式编号) '))
+    ReciteCount = int(input('(抽取知识点数) '))
 
-    Picker = Pickers.OrderPicker
-    match Picker:
+    Picker = Pickers.RandomPicker
+    match Input:
         case 1:
             Picker = Pickers.OrderPicker
         case 2:
             Picker = Pickers.RandomPicker
 
-    Recite(Result, Picker)
+    Recite(Result, Picker, ReciteCount)
 
     input('(背诵任务完成)')

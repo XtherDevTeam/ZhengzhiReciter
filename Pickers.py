@@ -1,11 +1,15 @@
 import random
+import time
 
 
 def RandomPicker(N, Last):
-    return int(random.random()) % N + 1
+    print('Picker: RandomPicker')
+    random.seed(int(time.time()))
+    return random.randint(1, N)
 
 
 def OrderPicker(N, Last):
+    print('Picker: OrderPicker')
     if Last == N:
         return 0
 
