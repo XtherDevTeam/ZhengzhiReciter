@@ -21,17 +21,17 @@ ErrorCount = 0
 
 def ShowErrorCount():
     global ErrorCount
-    Str = ' 错误次数 ' + str(ErrorCount) + ' 。'
+    Str = ''
     if ErrorCount > 25:
-        Str = '你可真是个大傻逼，一次下来错误次数大于25次 ^_^' + Str
+        Str = '你可真是个大傻逼，一次下来错误次数大于25次 ^_^' + ' 错误次数 ' + str(ErrorCount) + ' 。'
     elif ErrorCount > 10:
-        Str = '至少没挂 Keep moving on ^_^' + Str
+        Str = '至少没挂 Keep moving on ^_^' + ' 错误次数 ' + str(ErrorCount) + ' 。'
     elif ErrorCount > 5:
-        Str = '已经很厉害了 (ง •_•)ง' + Str
+        Str = '已经很厉害了 (ง •_•)ง' + ' 错误次数 ' + str(ErrorCount) + ' 。'
     elif ErrorCount == 0:
-        Str = '这边建议直接参加考试 awa' + Str
+        Str = '这边建议直接参加考试 awa' + ' 错误次数 ' + str(ErrorCount) + ' 。'
     else:
-        Str = '大佬牛逼!'
+        Str = '大佬牛逼!' + ' 错误次数 ' + str(ErrorCount) + ' 。'
 
     print(Str)
 
@@ -69,12 +69,12 @@ def Recite(Problems, PickerFunc, Count):
         '''
         Picked = PickerFunc(len(Problems), Picked)
         WholeProblemPercent = 1
-        IsTheFirstTime = False
+        IsTheFirstTime = True
 
         while WholeProblemPercent >= 0.2:
             print('--- 现在是', r + 1, '/', Count, '个问题 ---')
             print('当前问题: ' + Problems[Picked - 1]['title'])
-            if Configs['show-answers-in-the-first-time'] == True and IsTheFirstTime:
+            if Configs['show-answers-in-the-first-time'] == True or IsTheFirstTime == False:
                 print('答案为:')
                 for Point in Problems[Picked - 1]['points']:
                     print('-', Point)
